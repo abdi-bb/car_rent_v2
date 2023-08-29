@@ -14,7 +14,6 @@ CREATE TABLE admin (
 
 CREATE TABLE car (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  admin_id INTEGER NOT NULL,
   name TEXT NOT NULL,
   model TEXT NOT NULL,
   status TEXT NOT NULL,
@@ -22,31 +21,28 @@ CREATE TABLE car (
   door INTEGER NOT NULL,
   gearbox TEXT NOT NULL,
   image TEXT,
-  FOREIGN KEY (admin_id) REFERENCES admin (id)
 );
 
 CREATE TABLE customer (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  admin_id INTEGER NOT NULL,
   username TEXT UNIQUE NOT NULL,
   name TEXT NOT NULL,
   last_name TEXT NOT NULL,
   address TEXT NOT NULL,
   phone_number TEXT NOT NULL,
   email TEXT NOT NULL,
-  password TEXT NOT NULL,
-  FOREIGN KEY (admin_id) REFERENCES admin (id)
+  password TEXT NOT NULL
 );
 
 CREATE TABLE reservation (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  admin_id INTEGER NOT NULL,
   customer_id INTEGER NOT NULL,
+  car_id INTEGER NOT NULL,
   customer_name TEXT NOT NULL,
   pickup_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   dropoff_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   email TEXT NOT NULL,
   password TEXT NOT NULL,
   FOREIGN KEY (customer_id) REFERENCES customer (id),
-  FOREIGN KEY (admin_id) REFERENCES admin (id)
+  FOREIGN KEY (car_id) REFERENCES car (id)
 );
