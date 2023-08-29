@@ -20,7 +20,7 @@ CREATE TABLE car (
   seat INTEGER NOT NULL,
   door INTEGER NOT NULL,
   gearbox TEXT NOT NULL,
-  image TEXT,
+  image TEXT
 );
 
 CREATE TABLE customer (
