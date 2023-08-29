@@ -9,7 +9,7 @@ from car_app.db import get_db
 
 bp = Blueprint('customer', __name__, url_prefix='/customer')
 
-
+# Customer register control
 @bp.route('/register', methods=('GET', 'POST'))
 def register():
     if request.method == 'POST':
@@ -54,7 +54,7 @@ def register():
 
     return render_template('customer/register.html')
 
-
+# Customer login control
 @bp.route('/login', methods=('GET', 'POST'))
 def login():
     if request.method == 'POST':
@@ -80,6 +80,7 @@ def login():
 
     return render_template('customer/login.html')
 
+# Getting customer id that was previously stored during login
 @bp.before_app_request
 def load_logged_in_customer():
     customer_id = session.get('customer_id')
@@ -91,13 +92,13 @@ def load_logged_in_customer():
             'SELECT * FROM customer WHERE id = ?', (customer_id,)
         ).fetchone()
 
-# logging out
+# logging out a customer by clearing customer id from the session
 @bp.route('/logout')
 def logout():
     session.clear()
     return redirect(url_for('customer.login'))
 
-# Views that ask for login
+# login_required decorator for login requirin views
 def login_required(view):
     @functools.wraps(view)
     def wrapped_view(**kwargs):
