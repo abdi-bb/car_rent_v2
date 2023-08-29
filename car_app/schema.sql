@@ -6,8 +6,8 @@ DROP TABLE IF EXISTS reservation;
 
 CREATE TABLE admin (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  name TEXT NOT NULL,
   username TEXT UNIQUE NOT NULL,
+  name TEXT NOT NULL,
   email TEXT NOT NULL,
   password TEXT NOT NULL
 );
