@@ -22,7 +22,7 @@ CREATE TABLE car (
   door INTEGER NOT NULL,
   gearbox TEXT NOT NULL,
   image TEXT,
-  FOREIGN KEY (admin_id) REFERENCES admin (id),
+  FOREIGN KEY (admin_id) REFERENCES admin (id)
 );
 
 CREATE TABLE customer (
