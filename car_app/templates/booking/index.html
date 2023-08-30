@@ -4,21 +4,21 @@
   <h1>{% block title %}Your Active Bookings{% endblock %}</h1>
   <a class="action" href="{{ url_for('customer.login') }}">New Booking</a>
   {% if g.customer %}
-    <a class="action" href="{{ url_for('reservation.create') }}">New Booking</a>
+    <a class="action" href="{{ url_for('booking.create') }}">New Booking</a>
   {% endif %}
 {% endblock %}
 
 {% block content %}
-  {% for reservation in registerations %}
+  {% for booking in bookings %}
     <article class="post">
       <header>
-        {% if g.customer['id'] == reservation['customer_id'] %}
-	  <h1>Mr. {{ reservation['name'] }} Reservation</h1>
+        {% if g.customer['id'] == booking['customer_id'] %}
+	  <h1>Mr. {{ booking['name'] }} Bookings</h1>
 	  <div class="about">from {{ reservation['pickup_time'].strftime('%Y-%m-%d') }} to {{ reservation['dropoff_time'].strftime('%Y-%m-%d') }}</div>
-          <a class="action" href="{{ url_for('reservation.update', id=reservation['id']) }}">Edit</a>
+          <a class="action" href="{{ url_for('booking.update', id=booking['id']) }}">Edit</a>
         {% endif %}
       </header>
-      <p class="body">{{ reservation['id'] }}</p>
+      <p class="body">{{ booking['id'] }}</p>
     </article>
     {% if not loop.last %}
       <hr>

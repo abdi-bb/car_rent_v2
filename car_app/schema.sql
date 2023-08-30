@@ -1,7 +1,7 @@
 DROP TABLE IF EXISTS admin;
 DROP TABLE IF EXISTS car;
 DROP TABLE IF EXISTS customer;
-DROP TABLE IF EXISTS reservation;
+DROP TABLE IF EXISTS booking;
 
 
 CREATE TABLE admin (
@@ -34,7 +34,7 @@ CREATE TABLE customer (
   password TEXT NOT NULL
 );
 
-CREATE TABLE reservation (
+CREATE TABLE booking (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   customer_id INTEGER NOT NULL,
   car_id INTEGER NOT NULL,
