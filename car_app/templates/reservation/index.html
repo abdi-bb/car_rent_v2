@@ -1,9 +1,10 @@
 {% extends 'base.html' %}
 
 {% block header %}
-  <h1>{% block title %}Registerations{% endblock %}</h1>
+  <h1>{% block title %}Your Active Bookings{% endblock %}</h1>
+  <a class="action" href="{{ url_for('customer.login') }}">New Booking</a>
   {% if g.customer %}
-    <a class="action" href="{{ url_for('reservation.create') }}">New</a>
+    <a class="action" href="{{ url_for('reservation.create') }}">New Booking</a>
   {% endif %}
 {% endblock %}
 
@@ -11,15 +12,13 @@
   {% for reservation in registerations %}
     <article class="post">
       <header>
-        <div>
-          <h1>Dear {{ reservation['customer_name'] }}</h1>
-          <div class="about">by {{ post['username'] }} on {{ post['created'].strftime('%Y-%m-%d') }}</div>
-        </div>
-        {% if g.user['id'] == post['author_id'] %}
-          <a class="action" href="{{ url_for('blog.update', id=post['id']) }}">Edit</a>
+        {% if g.customer['id'] == reservation['customer_id'] %}
+	  <h1>Mr. {{ reservation['name'] }} Reservation</h1>
+	  <div class="about">from {{ reservation['pickup_time'].strftime('%Y-%m-%d') }} to {{ reservation['dropoff_time'].strftime('%Y-%m-%d') }}</div>
+          <a class="action" href="{{ url_for('reservation.update', id=reservation['id']) }}">Edit</a>
         {% endif %}
       </header>
-      <p class="body">{{ post['body'] }}</p>
+      <p class="body">{{ reservation['id'] }}</p>
     </article>
     {% if not loop.last %}
       <hr>
