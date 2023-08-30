@@ -40,6 +40,10 @@ def create_app(test_config=None):
 
     from . import booking
     app.register_blueprint(booking.bp)
+    # app.add_url_rule('/', endpoint='index')
+
+    from . import car
+    app.register_blueprint(car.bp)
     app.add_url_rule('/', endpoint='index')
 
     return app

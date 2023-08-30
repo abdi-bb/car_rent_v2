@@ -7,7 +7,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from car_app.customer import login_required
 from car_app.db import get_db
 
-bp = Blueprint('booking', __name__)
+bp = Blueprint('booking', __name__, url_prefix='/booking')
 
 # Booking index page(The logged in user can see his reservation)
 @bp.route('/')
