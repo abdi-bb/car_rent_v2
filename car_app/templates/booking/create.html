@@ -14,6 +14,6 @@
     <input name="email" id="email" value="{{ request.form['email'] }}" required>
     <label for="password">Password</label>
     <input type="password" name="password" id="password" value="{{ request.form['password'] }}" required>
-    <input type="submit" value="Save">
+    <input type="submit" value="Save"><a class="action" href="{{ url_for('car.index') }}">Cancel</a>
   </form>
 {% endblock %}

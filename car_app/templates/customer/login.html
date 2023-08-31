@@ -5,11 +5,13 @@
 {% endblock %}
 
 {% block content %}
-  <form method="post">
+  <form id="customer-login-form" method="post">
     <label for="username">Username</label>
     <input name="username" id="username" required>
     <label for="password">Password</label>
     <input type="password" name="password" id="password" required>
     <input type="submit" value="Log In">
+    <p>New Here?   <a href="{{ url_for('customer.register') }}">Register</a>  OR  <a href="{{ url_for('car.guest_mode') }}">Go Guest Mode</a></p>
+    <p>New Here?   <button class="btn btn-primary" hx-get=" {{ url_for('customer.register') }}" hx-swap="innerHTML" hx-target="#customer-login-form">Register</button>  OR  <button class="btn btn-primary" hx-get=" {{ url_for('car.guest_mode') }}" hx-swap="outerHTML" hx-target="#customer-login-form"">Go Guest Mode</button></p>
   </form>
 {% endblock %}

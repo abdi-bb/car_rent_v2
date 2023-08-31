@@ -14,3 +14,8 @@ bp = Blueprint('car', __name__)
 @login_required
 def index():
     return render_template('car/index.html')
+
+# Guest mode page
+@bp.route('/guest_mode')
+def guest_mode():
+    return render_template('car/index.html')
