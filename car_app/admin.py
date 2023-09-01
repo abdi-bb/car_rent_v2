@@ -65,7 +65,7 @@ def login():
         if error is None:
             session.clear()
             session['admin_id'] = admin['id']
-            return redirect(url_for('admin.index'))
+            return redirect(url_for('admin.home'))
 
         flash(error)
 
@@ -93,9 +93,15 @@ def logout():
 def login_required(view):
     @functools.wraps(view)
     def wrapped_view(**kwargs):
-        if g.user is None:
+        if g.admin is None:
             return redirect(url_for('admin.login'))
 
         return view(**kwargs)
 
     return wrapped_view
+
+# Admin Home(Dashboard)
+@bp.route('/')
+@login_required
+def home():
+    return 'This is admin home/dashboard'

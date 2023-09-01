@@ -32,7 +32,7 @@ def guest_mode():
     ).fetchall()
     return render_template('car/index.html', cars=cars)
 
-# Admin can create new car entry
+## Admin can create new car entry ##
 @bp.route('/create', methods=('GET', 'POST'))
 @login_required
 def create():

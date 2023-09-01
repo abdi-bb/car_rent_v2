@@ -111,7 +111,7 @@ def login_required(view):
     return wrapped_view
 
 
-# Admin control over customer
+## Admin control over customer ##
 
 # Customer index page
 @bp.route('/')
@@ -171,7 +171,7 @@ def create():
 
     return render_template('customer/create.html')
 
-# Admin can update customer table
+## Admin can update customer table ##
 # Get the customer to be updated
 def get_customer(id, check_author=True):
     customer = get_db().execute(
@@ -230,3 +230,12 @@ def update(id):
             return redirect(url_for('customer.index'))
 
     return render_template('customer/update.html', customer=customer)
+
+@bp.route('/<int:id>/delete', methods=('POST',))
+@login_required
+def delete(id):
+    get_customer(id)
+    db = get_db()
+    db.execute('DELETE FROM customer WHERE id = ?', (id,))
+    db.commit()
+    return redirect(url_for('customer.index'))
