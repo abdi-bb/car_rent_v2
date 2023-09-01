@@ -21,13 +21,13 @@ def index():
     ).fetchall()
     return render_template('car/index.html', cars=cars)
 
-# Temporary Car index page(The logged in customer can see main car list)
-@bp.route('/')
-@login_required
-def index():
-    return render_template('car/index.html')
-
-# Guest mode page
+# Guest mode page, Customer can see without logging in if he wish
 @bp.route('/guest_mode')
 def guest_mode():
-    return render_template('car/index.html')
+    db = get_db()
+    cars = db.execute(
+        'SELECT name, image'
+        ' FROM car'
+        ' ORDER BY name ASC'
+    ).fetchall()
+    return render_template('car/index.html', cars=cars)
