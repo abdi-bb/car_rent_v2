@@ -9,6 +9,18 @@ from car_app.db import get_db
 
 bp = Blueprint('car', __name__)
 
+# Car list
+@bp.route('/')
+@login_required
+def index():
+    db = get_db()
+    cars = db.execute(
+        'SELECT name, image'
+        ' FROM car'
+        ' ORDER BY name ASC'
+    ).fetchall()
+    return render_template('car/index.html', cars=cars)
+
 # Temporary Car index page(The logged in customer can see main car list)
 @bp.route('/')
 @login_required
