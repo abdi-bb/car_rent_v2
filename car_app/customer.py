@@ -3,6 +3,7 @@ import functools
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for
 )
+from werkzeug.exceptions import abort
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from car_app.db import get_db
@@ -108,3 +109,124 @@ def login_required(view):
         return view(**kwargs)
 
     return wrapped_view
+
+
+# Admin control over customer
+
+# Customer index page
+@bp.route('/')
+@login_required
+def index():
+    db = get_db()
+    customers = db.execute(
+        'SELECT name, last_name, address, phone_number'
+        ' FROM customer'
+        ' ORDER BY name ASC'
+    ).fetchall()
+    return render_template('customer/index.html', customers=customers)
+
+# customer can be created by the logged in addmin
+@bp.route('/create', methods=('GET', 'POST'))
+@login_required
+def create():
+    if request.method == 'POST':
+        username = request.form['username']
+        name = request.form['name']
+        last_name = request.form['last_name']
+        address = request.form['address']
+        phone_number = request.form['phone_number']
+        email = request.form['email']
+        password = request.form['password']
+        db = get_db()
+        error = None
+
+        if not username:
+            error = 'Username is required.'
+        elif not name:
+            error = 'Name is required.'
+        elif not last_name:
+            error = 'Last Name is required.'
+        elif not address:
+            error = 'Address is required.'
+        elif not phone_number:
+            error = 'Phone Number is required.'
+        elif not email:
+            error = 'Email is required.'
+        elif not password:
+            error = 'Password is required.'
+
+        if error is None:
+            try:
+                db.execute(
+                    "INSERT INTO customer (username, name, last_name, address, phone_number, email,  password) VALUES (?, ?, ?, ?, ?, ?, ?)",
+                    (username, name, last_name, address, phone_number, email, generate_password_hash(password)),
+                )
+                db.commit()
+            except db.IntegrityError:
+                error = f"User {username} is already registered."
+            else:
+                return redirect(url_for("customer.index"))
+
+        flash(error)
+
+    return render_template('customer/create.html')
+
+# Admin can update customer table
+# Get the customer to be updated
+def get_customer(id, check_author=True):
+    customer = get_db().execute(
+        'SELECT username, name, last_name, address, phone_number, email,  password'
+        ' FROM customer'
+        ' WHERE id = ?',
+        (id,)
+    ).fetchone()
+
+    if customer is None:
+        abort(404, f"Customer id {id} doesn't exist.")
+
+    return customer
+
+# Update the customer
+@bp.route('/<int:id>/update', methods=('GET', 'POST'))
+@login_required
+def update(id):
+    customer = get_customer(id)
+    if request.method == 'POST':
+        username = request.form['username']
+        name = request.form['name']
+        last_name = request.form['last_name']
+        address = request.form['address']
+        phone_number = request.form['phone_number']
+        email = request.form['email']
+        password = request.form['password']
+        error = None
+
+        if not username:
+            error = 'Username is required.'
+        elif not name:
+            error = 'Name is required.'
+        elif not last_name:
+            error = 'Last Name is required.'
+        elif not address:
+            error = 'Address is required.'
+        elif not phone_number:
+            error = 'Phone Number is required.'
+        elif not email:
+            error = 'Email is required.'
+        elif not password:
+            error = 'Password is required.'
+
+
+        if error is not None:
+            flash(error)
+        else:
+            db = get_db()
+            db.execute(
+                'UPDATE customer SET username = ?, name = ?, last_name = ?, address = ?, phone_number = ?, email = ?,  password = ?'
+                ' WHERE id = ?',
+                (username, name, last_name, address, phone_number, email,  password, id)
+            )
+            db.commit()
+            return redirect(url_for('customer.index'))
+
+    return render_template('customer/update.html', customer=customer)

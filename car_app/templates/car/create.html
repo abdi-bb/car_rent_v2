@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}New Car{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+  <form method="post">
+    <label for="name">Car Name</label>
+    <input name="name" id="name" value="{{ request.form['name'] }}" required>
+    <label for="model">Car Model</label>
+    <input name="model" id="model" value="{{ request.form['model'] }}" required>
+    <label for="status">Car Status</label>
+    <input name="status" id="status" value="{{ request.form['status'] }}" required>
+    <label for="seat">Number of Seats</label>
+    <input name="seat" id="seat" value="{{ request.form['seat'] }}" required>
+    <label for="door">Doors</label>
+    <input name="door" id="door" value="{{ request.form['door'] }}" required>
+    <label for="gearbox">Gearbox Type</label>
+    <input name="gearbox" id="gearbox" value="{{ request.form['gearbox'] }}" required>
+    <label for="image">Car image</label>
+    <input name="image" id="image" value="{{ request.form['image'] }}">
+    <input type="submit" value="Save">
+  </form>
+{% endblock %}

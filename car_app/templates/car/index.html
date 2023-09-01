@@ -3,7 +3,7 @@
 {% block header %}
   <h1>{% block title %}Available Cars{% endblock %}</h1>
   {% if g.customer %}
-    <p><a class="action" href="{{ url_for('booking.index') }}">Manage Bookings</a><a class="action" href="{{ url_for('booking.create') }}">New Booking</a></p>
+    <a class="action" href="{{ url_for('booking.index') }}">Manage Your Booking</a>
   {% endif %}
 {% endblock %}
 
@@ -13,6 +13,10 @@
       <header>
         <div>
           <h1>{{ car['name'] }}</h1>
+          <div class="car_image">{{ car['image'] }}</div>
+        {% if g.admin %}
+          <a class="action" href="{{ url_for('car.update', id=car['id']) }}">Edit Car Details</a>
+        {% endif %}
       </header>
     </article>
     {% if not loop.last %}
