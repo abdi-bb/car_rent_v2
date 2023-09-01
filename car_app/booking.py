@@ -28,6 +28,8 @@ def index():
 @login_required
 def create():
     if request.method == 'POST':
+        pickup_time = request.form['pickup_time']
+        dropoff_time = request.form['dropoff_time']
         email = request.form['email']
         password = request.form['password']
         error = None
@@ -42,9 +44,9 @@ def create():
         else:
             db = get_db()
             db.execute(
-                'INSERT INTO booking (email, password, customer_id)'
-                ' VALUES (?, ?, ?)',
-                (email, generate_password_hash(password), g.customer['id'])
+                'INSERT INTO booking (pickup_time, dropoff_time, email, password, customer_id)'
+                ' VALUES (?, ?, ?, ?, ?)',
+                (pickup_time, dropoff_time, email, generate_password_hash(password), g.customer['id'])
             )
             db.commit()
             return redirect(url_for('booking.index'))
@@ -65,10 +67,12 @@ def get_booking(id, check_author=True):
     if booking is None:
         abort(404, f"Booking id {id} doesn't exist.")
 
-    if check_author and booking['customer_id'] != g.customer['id']:
+    if check_author and g.customer and booking['customer_id'] != g.customer['id']:
         abort(403)
-
-    return booking
+    elif check_author and not g.admin:
+        abort(403)
+    elif not check_author or g.admin or g.customer == booking['customer_id']:
+        return booking
 
 @bp.route('/<int:id>/update', methods=('GET', 'POST'))
 @login_required

@@ -104,4 +104,5 @@ def login_required(view):
 @bp.route('/')
 @login_required
 def home():
-    return 'This is admin home/dashboard'
+    #return 'This is admin home/dashboard'
+    return render_template('admin/home.html')

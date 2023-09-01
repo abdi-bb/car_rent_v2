@@ -5,6 +5,7 @@
 {% endblock %}
 
 {% block content %}
+   {% if g.customer or g.admin %}
   <form method="post">
     <label for="pickup_time">Pickup Time</label>
     <input name="pickup_time" id="#" value="{{ request.form['pickup_time'] }}">
@@ -16,4 +17,7 @@
     <input type="password" name="password" id="password" value="{{ request.form['password'] }}" required>
     <input type="submit" value="Save"><a class="action" href="{{ url_for('car.index') }}">Cancel</a>
   </form>
+  {% else %}
+    <p>You must be a customer or an administrator to create a booking.</p>
+  {% endif %}
 {% endblock %}
