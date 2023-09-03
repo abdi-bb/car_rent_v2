@@ -14,24 +14,18 @@ bp = Blueprint('customer', __name__, url_prefix='/customer')
 @bp.route('/register', methods=('GET', 'POST'))
 def register():
     if request.method == 'POST':
-        username = request.form['username']
         name = request.form['name']
         last_name = request.form['last_name']
-        address = request.form['address']
         phone_number = request.form['phone_number']
         email = request.form['email']
         password = request.form['password']
         db = get_db()
         error = None
 
-        if not username:
-            error = 'Username is required.'
-        elif not name:
+        if not name:
             error = 'Name is required.'
         elif not last_name:
             error = 'Last Name is required.'
-        elif not address:
-            error = 'Address is required.'
         elif not phone_number:
             error = 'Phone Number is required.'
         elif not email:
@@ -42,8 +36,8 @@ def register():
         if error is None:
             try:
                 db.execute(
-                    "INSERT INTO customer (username, name, last_name, address, phone_number, email,  password) VALUES (?, ?, ?, ?, ?, ?, ?)",
-                    (username, name, last_name, address, phone_number, email, generate_password_hash(password)),
+                    "INSERT INTO customer (name, last_name, phone_number, email,  password) VALUES (?, ?, ?, ?, ?)",
+                    (name, last_name, phone_number, email, generate_password_hash(password)),
                 )
                 db.commit()
             except db.IntegrityError:
@@ -59,16 +53,16 @@ def register():
 @bp.route('/login', methods=('GET', 'POST'))
 def login():
     if request.method == 'POST':
-        username = request.form['username']
+        email = request.form['email']
         password = request.form['password']
         db = get_db()
         error = None
         customer = db.execute(
-            'SELECT * FROM customer WHERE username = ?', (username,)
+            'SELECT * FROM customer WHERE email = ?', (email,)
         ).fetchone()
 
         if customer is None:
-            error = 'Incorrect username.'
+            error = 'Incorrect email.'
         elif not check_password_hash(customer['password'], password):
             error = 'Incorrect password.'
 
@@ -119,7 +113,7 @@ def login_required(view):
 def index():
     db = get_db()
     customers = db.execute(
-        'SELECT name, last_name, address, phone_number'
+        'SELECT name, last_name, phone_number'
         ' FROM customer'
         ' ORDER BY name ASC'
     ).fetchall()
@@ -130,24 +124,18 @@ def index():
 @login_required
 def create():
     if request.method == 'POST':
-        username = request.form['username']
         name = request.form['name']
         last_name = request.form['last_name']
-        address = request.form['address']
         phone_number = request.form['phone_number']
         email = request.form['email']
         password = request.form['password']
         db = get_db()
         error = None
 
-        if not username:
-            error = 'Username is required.'
-        elif not name:
+        if not name:
             error = 'Name is required.'
         elif not last_name:
             error = 'Last Name is required.'
-        elif not address:
-            error = 'Address is required.'
         elif not phone_number:
             error = 'Phone Number is required.'
         elif not email:
@@ -158,12 +146,12 @@ def create():
         if error is None:
             try:
                 db.execute(
-                    "INSERT INTO customer (username, name, last_name, address, phone_number, email,  password) VALUES (?, ?, ?, ?, ?, ?, ?)",
-                    (username, name, last_name, address, phone_number, email, generate_password_hash(password)),
+                    "INSERT INTO customer (name, last_name, phone_number, email,  password) VALUES (?, ?, ?, ?, ?, ?, ?)",
+                    (name, last_name, phone_number, email, generate_password_hash(password)),
                 )
                 db.commit()
             except db.IntegrityError:
-                error = f"User {username} is already registered."
+                error = f"Email {email} is already registered."
             else:
                 return redirect(url_for("customer.index"))
 
@@ -175,7 +163,7 @@ def create():
 # Get the customer to be updated
 def get_customer(id, check_author=True):
     customer = get_db().execute(
-        'SELECT username, name, last_name, address, phone_number, email,  password'
+        'SELECT name, last_name, phone_number, email,  password'
         ' FROM customer'
         ' WHERE id = ?',
         (id,)
@@ -192,23 +180,17 @@ def get_customer(id, check_author=True):
 def update(id):
     customer = get_customer(id)
     if request.method == 'POST':
-        username = request.form['username']
         name = request.form['name']
         last_name = request.form['last_name']
-        address = request.form['address']
         phone_number = request.form['phone_number']
         email = request.form['email']
         password = request.form['password']
         error = None
 
-        if not username:
-            error = 'Username is required.'
-        elif not name:
+        if not name:
             error = 'Name is required.'
         elif not last_name:
             error = 'Last Name is required.'
-        elif not address:
-            error = 'Address is required.'
         elif not phone_number:
             error = 'Phone Number is required.'
         elif not email:
@@ -222,9 +204,9 @@ def update(id):
         else:
             db = get_db()
             db.execute(
-                'UPDATE customer SET username = ?, name = ?, last_name = ?, address = ?, phone_number = ?, email = ?,  password = ?'
+                'UPDATE customer SET name = ?, last_name = ?, phone_number = ?, email = ?,  password = ?'
                 ' WHERE id = ?',
-                (username, name, last_name, address, phone_number, email,  password, id)
+                (name, last_name, phone_number, email,  password, id)
             )
             db.commit()
             return redirect(url_for('customer.index'))

@@ -1,17 +1,60 @@
-{% extends 'base.html' %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-{% block header %}
-  <h1>{% block title %}Customer Log In{% endblock %}</h1>
-{% endblock %}
+        <!-- ===== CSS ===== -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='assetss/css/styles.css') }}">
 
-{% block content %}
-  <form id="customer-login-form" method="post">
-    <label for="username">Username</label>
-    <input name="username" id="username" required>
-    <label for="password">Password</label>
-    <input type="password" name="password" id="password" required>
-    <input type="submit" value="Log In">
-    <p>New Here?   <a href="{{ url_for('customer.register') }}">Register</a>  OR  <a href="{{ url_for('car.guest_mode') }}">Go Guest Mode</a></p>
-    <p>New Here?   <button class="btn btn-primary" hx-get=" {{ url_for('customer.register') }}" hx-swap="innerHTML" hx-target="#customer-login-form">Register</button>  OR  <button class="btn btn-primary" hx-get=" {{ url_for('car.guest_mode') }}" hx-swap="outerHTML" hx-target="#customer-login-form"">Go Guest Mode</button></p>
-  </form>
-{% endblock %}
+        <!-- ===== BOX ICONS ===== -->
+        <link href='https://cdn.jsdelivr.net/npm/boxicons@2.0.5/css/boxicons.min.css' rel='stylesheet'>
+
+        <title>Responsive Login Form Sign In Sign Up</title>
+    </head>
+    <body>
+        <div class="login">
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <ul>
+                        {% for message in messages %}
+                            <li>{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+            {% endif %}
+            {% endwith %}
+            <div class="login__content">
+                <div class="login__img">
+                    <img src="{{ url_for('static', filename='assetss/img/img-login.svg') }}" alt="">
+                </div>
+
+                <div class="login__forms">
+                    <form action="{{ url_for('customer.login') }}" method="post" class="login__registre" id="login-in">
+                        <h1 class="login__title">Log In</h1>
+
+                        <div class="login__box">
+                            <i class='bx bx-user login__icon'></i>
+                            <input type="text" name="email" placeholder="Email" class="login__input">
+                        </div>
+
+                        <div class="login__box">
+                            <i class='bx bx-lock-alt login__icon'></i>
+                            <input type="password" name="password" placeholder="Password" class="login__input">
+                        </div>
+
+                        <a href="#" class="login__forgot">Forgot password?</a>
+
+                        <input type="submit" class="login__button" value="Log In">
+
+                        <div>
+                            <span class="login__account">Don't have an Account ?</span>
+                            <span class="login__signin" id="sign-up">Register</span>
+                        </div>
+			<div>
+                            <span class="login__account">Don't wanna create account ?</span>
+                            <span class="login__signin" id="sign-up">Go Guest Mode</span>
+                        </div>
+                    </form>
+
+		     <!--===== MAIN JS =====-->
+        <script src="{{ url_for('static', filename='assetss/js/main.js') }}"></script>
