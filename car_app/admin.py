@@ -43,7 +43,7 @@ def register():
 
         flash(error)
 
-    return render_template('admin/register.html')
+    return render_template('admin_register.html')
 
 # Admin login
 @bp.route('/login', methods=('GET', 'POST'))
@@ -69,7 +69,7 @@ def login():
 
         flash(error)
 
-    return render_template('admin/login.html')
+    return render_template('admin_login.html')
 
 # Load admin_id who is logged in using the stored id
 @bp.before_app_request
@@ -105,4 +105,4 @@ def login_required(view):
 @login_required
 def home():
     #return 'This is admin home/dashboard'
-    return render_template('admin/home.html')
+    return render_template('admin_home.html')

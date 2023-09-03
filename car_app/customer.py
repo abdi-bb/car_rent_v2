@@ -53,7 +53,7 @@ def register():
 
         flash(error)
 
-    return render_template('customer/register.html')
+    return render_template('customer_register.html')
 
 # Customer login control
 @bp.route('/login', methods=('GET', 'POST'))
@@ -79,7 +79,7 @@ def login():
 
         flash(error)
 
-    return render_template('customer/login.html')
+    return render_template('customer_login.html')
 
 # Getting customer id that was previously stored during login
 @bp.before_app_request
@@ -123,7 +123,7 @@ def index():
         ' FROM customer'
         ' ORDER BY name ASC'
     ).fetchall()
-    return render_template('customer/index.html', customers=customers)
+    return render_template('customer_index.html', customers=customers)
 
 # customer can be created by the logged in addmin
 @bp.route('/create', methods=('GET', 'POST'))
@@ -169,7 +169,7 @@ def create():
 
         flash(error)
 
-    return render_template('customer/create.html')
+    return render_template('customer_create.html')
 
 ## Admin can update customer table ##
 # Get the customer to be updated
@@ -229,7 +229,7 @@ def update(id):
             db.commit()
             return redirect(url_for('customer.index'))
 
-    return render_template('customer/update.html', customer=customer)
+    return render_template('customer_update.html', customer=customer)
 
 @bp.route('/<int:id>/delete', methods=('POST',))
 @login_required
