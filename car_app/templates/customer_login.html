@@ -10,7 +10,7 @@
         <!-- ===== BOX ICONS ===== -->
         <link href='https://cdn.jsdelivr.net/npm/boxicons@2.0.5/css/boxicons.min.css' rel='stylesheet'>
 
-        <title>Responsive Login Form Sign In Sign Up</title>
+        <title>WheelsOnRent-LogIn</title>
     </head>
     <body>
         <div class="login">
@@ -48,11 +48,11 @@
 
                         <div>
                             <span class="login__account">Don't have an Account ?</span>
-                            <span class="login__signin" id="sign-up">Register</span>
+			    <a class="login__signin" href="{{ url_for('customer.register') }}">Register</a>
                         </div>
 			<div>
                             <span class="login__account">Don't wanna create account ?</span>
-                            <span class="login__signin" id="sign-up">Go Guest Mode</span>
+			    <a class="login__signin" href="{{ url_for('car.guest_mode') }}">Go Guest Mode</a>
                         </div>
                     </form>
 

@@ -2,7 +2,7 @@
 
 {% block header %}
   <h1>{% block title %}Customers{% endblock %}</h1>
-  {% if g.admin %}
+  {% if g.customer and g.customer['role'] == 1 %}
     <a class="action" href="{{ url_for('customer.create') }}">Add New</a>
   {% endif %}
 {% endblock %}
@@ -13,7 +13,6 @@
     <tr>
       <th>Name</th>
       <th>Last Name</th>
-      <th>Address</th>
       <th>Phone Number</th>
       <th>Edit</th>
       <th>Delete</th>
@@ -24,11 +23,10 @@
       <tr>
         <td>{{ customer.name }}</td>
         <td>{{ customer.last_name }}</td>
-        <td>{{ customer.address }}</td>
         <td>{{ customer.phone_number }}</td>
-        {% if g.admin %}
-          <td><a class="action" href="{{ url_for('customer.update', id=customer.id) }}">Edit</a></td>
-          <td><a class="action" href="{{ url_for('customer.delete', id=customer.id) }}">Delete</a></td>
+        {% if g.customer and g.customer['role'] == 1 %}
+          <td><a class="action" href="{{ url_for('customer.update', id=customer['id']) }}">Edit</a></td>
+          <td><a class="action" href="{{ url_for('customer.delete', id=customer['id']) }}">Delete</a></td>
         {% endif %}
       </tr>
     {% endfor %}

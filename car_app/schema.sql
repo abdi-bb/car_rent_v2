@@ -1,16 +1,7 @@
-DROP TABLE IF EXISTS admin;
 DROP TABLE IF EXISTS car;
 DROP TABLE IF EXISTS customer;
 DROP TABLE IF EXISTS booking;
 
-
-CREATE TABLE admin (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  username TEXT UNIQUE NOT NULL,
-  name TEXT NOT NULL,
-  email TEXT NOT NULL,
-  password TEXT NOT NULL
-);
 
 CREATE TABLE car (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -29,7 +20,8 @@ CREATE TABLE customer (
   last_name TEXT NOT NULL,
   phone_number TEXT NOT NULL,
   email TEXT NOT NULL,
-  password TEXT NOT NULL
+  password TEXT NOT NULL,
+  role TEXT INTEGER DEFAULT 0
 );
 
 CREATE TABLE booking (

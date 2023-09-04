@@ -19,6 +19,7 @@ def register():
         phone_number = request.form['phone_number']
         email = request.form['email']
         password = request.form['password']
+        role = int(request.form['role'])
         db = get_db()
         error = None
 
@@ -36,8 +37,8 @@ def register():
         if error is None:
             try:
                 db.execute(
-                    "INSERT INTO customer (name, last_name, phone_number, email,  password) VALUES (?, ?, ?, ?, ?)",
-                    (name, last_name, phone_number, email, generate_password_hash(password)),
+                    "INSERT INTO customer (name, last_name, phone_number, email,  password, role) VALUES (?, ?, ?, ?, ?, ?)",
+                    (name, last_name, phone_number, email, generate_password_hash(password), role),
                 )
                 db.commit()
             except db.IntegrityError:
@@ -69,6 +70,8 @@ def login():
         if error is None:
             session.clear()
             session['customer_id'] = customer['id']
+            if customer['role'] == 1:
+                return redirect(url_for('customer.admin_dashboard'))
             return redirect(url_for('car.index'))
 
         flash(error)
@@ -113,8 +116,9 @@ def login_required(view):
 def index():
     db = get_db()
     customers = db.execute(
-        'SELECT name, last_name, phone_number'
+        'SELECT id, name, last_name, phone_number'
         ' FROM customer'
+        ' WHERE role = 0'
         ' ORDER BY name ASC'
     ).fetchall()
     return render_template('customer_index.html', customers=customers)
@@ -129,6 +133,7 @@ def create():
         phone_number = request.form['phone_number']
         email = request.form['email']
         password = request.form['password']
+        role = int(request.form['role'])
         db = get_db()
         error = None
 
@@ -146,8 +151,8 @@ def create():
         if error is None:
             try:
                 db.execute(
-                    "INSERT INTO customer (name, last_name, phone_number, email,  password) VALUES (?, ?, ?, ?, ?, ?, ?)",
-                    (name, last_name, phone_number, email, generate_password_hash(password)),
+                    "INSERT INTO customer (name, last_name, phone_number, email,  password, role) VALUES (?, ?, ?, ?, ?, ?)",
+                    (name, last_name, phone_number, email, generate_password_hash(password), role),
                 )
                 db.commit()
             except db.IntegrityError:
@@ -163,7 +168,7 @@ def create():
 # Get the customer to be updated
 def get_customer(id, check_author=True):
     customer = get_db().execute(
-        'SELECT name, last_name, phone_number, email,  password'
+        'SELECT id, name, last_name, phone_number, email,  password'
         ' FROM customer'
         ' WHERE id = ?',
         (id,)
@@ -185,6 +190,7 @@ def update(id):
         phone_number = request.form['phone_number']
         email = request.form['email']
         password = request.form['password']
+        role = int(request.form['role'])
         error = None
 
         if not name:
@@ -204,16 +210,16 @@ def update(id):
         else:
             db = get_db()
             db.execute(
-                'UPDATE customer SET name = ?, last_name = ?, phone_number = ?, email = ?,  password = ?'
+                'UPDATE customer SET name = ?, last_name = ?, phone_number = ?, email = ?,  password = ?, role = ?'
                 ' WHERE id = ?',
-                (name, last_name, phone_number, email,  password, id)
+                (name, last_name, phone_number, email,  password, role, id)
             )
             db.commit()
             return redirect(url_for('customer.index'))
 
     return render_template('customer_update.html', customer=customer)
 
-@bp.route('/<int:id>/delete', methods=('POST',))
+@bp.route('/<int:id>/delete', methods=('POST', 'DELETE',))
 @login_required
 def delete(id):
     get_customer(id)
@@ -221,3 +227,10 @@ def delete(id):
     db.execute('DELETE FROM customer WHERE id = ?', (id,))
     db.commit()
     return redirect(url_for('customer.index'))
+
+# Admin Home(Dashboard)
+@bp.route('/')
+@login_required
+def admin_dashboard():
+    #return 'This is admin home/dashboard'
+    return render_template('admin_dashboard.html')
