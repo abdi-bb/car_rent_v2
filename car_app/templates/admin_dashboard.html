@@ -11,7 +11,7 @@
       <div class="col-md-4">
         {% if g.customer and g.customer['role'] == 1 %}
           <form action="{{ url_for(route) }}" method="get">
-            <button type="submit" class="btn btn-primary btn-lg btn-block">
+            <button type="submit" class="btn btn-primary btn-block">
               <strong>Manage {{ item }}</strong>
             </button>
           </form>
