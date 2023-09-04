@@ -229,7 +229,7 @@ def delete(id):
     return redirect(url_for('customer.index'))
 
 # Admin Home(Dashboard)
-@bp.route('/')
+@bp.route('/admin_dashboard')
 @login_required
 def admin_dashboard():
     #return 'This is admin home/dashboard'

@@ -3,24 +3,20 @@
 {% block header %}
   <h1>{% block title %}Your Active Bookings{% endblock %}</h1>
   {% if g.customer %}
-    <a class="action" href="{{ url_for('booking.create') }}">New Booking</a>
-    <a class="action" href="{{ url_for('car.index') }}">See Cars</a>
-  {% else %}
-    <a class="action" href="{{ url_for('customer.login') }}">Please login to create a booking</a>
+    <a class="action" href="{{ url_for('booking.create') }}">Add New</a>
   {% endif %}
 {% endblock %}
 
 {% block content %}
-  <table>
+  <table class="table">
     <thead>
       <tr>
         <th>ID</th>
         <th>Customer Name</th>
         <th>Pickup Time</th>
         <th>Car Name</th>
-        {% if g.admin or g.customer %}
-          <th>Edit</th>
-        {% endif %}
+        <th>Edit</th>
+      <th>Delete</th>
       </tr>
     </thead>
     <tbody>
@@ -30,9 +26,12 @@
           <td>{{ booking['name'] }}</td>
           <td>{{ booking['pickup_time'] }}</td>
           <td>{{ booking['name'] }}</td>
-          {% if g.admin or g.customer == booking['customer_id'] %}
-            <td><a class="action" href="{{ url_for('booking.update', id=booking['id']) }}">Edit</a></td>
-          {% endif %}
+	   {% if g.customer and g.customer['role'] == 1 or g.customer and g.customer[id] == booking['customer_id'] %}
+	  <td><form action="{{ url_for('booking.update', id=booking['id']) }}" method="get"><input class="update" type="submit" value="Update">
+		  </form></td>
+	  <td><form action="{{ url_for('booking.delete', id=booking['id']) }}" method="post"><input class="danger" type="submit" value="Delete" onclick="return confirm('Are you sure?')">
+		  </form></td>
+        {% endif %}
         </tr>
       {% endfor %}
     </tbody>

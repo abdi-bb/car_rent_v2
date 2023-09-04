@@ -1,35 +1,22 @@
 {% extends 'base.html' %}
 
 {% block header %}
-  <h1>{% block title %}Dashboard{% endblock %}</h1>
+  <h1>{% block title %}Admin Dashboard{% endblock %}</h1>
 {% endblock %}
 
 {% block content %}
   <div class="row">
-    <div class="col-md-4">
-      <h2>Customers</h2>
-      {% if g.customer %}
-        <a href="{{ url_for('customer.index') }}" class="btn btn-primary">View</a>
-        <a href="{{ url_for('customer.create') }}" class="btn btn-success">New</a>
-        <a href="{{ url_for('customer.update', id=g.customer.id) }}" class="btn btn-info">Update</a>
-      {% endif %}
-    </div>
-    <div class="col-md-4">
-      <h2>Cars</h2>
-      {% if g.customer %}
-        <a href="{{ url_for('car.index') }}" class="btn btn-primary">View</a>
-        <a href="{{ url_for('car.create') }}" class="btn btn-success">New</a>
-        <a href="{{ url_for('car.update', id=car.id) }}" class="btn btn-info">Update</a>
-      {% endif %}
-    </div>
-    <div class="col-md-4">
-      <h2>Bookings</h2>
-      {% if g.customer %}
-        <a href="{{ url_for('booking.index') }}" class="btn btn-primary">View</a>
-        <a href="{{ url_for('booking.create') }}" class="btn btn-success">New</a>
-        <a href="{{ url_for('booking.update', id=booking.id) }}" class="btn btn-info">Update</a>
-      {% endif %}
-    </div>
+    {% set items = [('Customers', 'customer.index'), ('Cars', 'car.index'), ('Bookings', 'booking.index')] %}
+    {% for item, route in items %}
+      <div class="col-md-4">
+        {% if g.customer and g.customer['role'] == 1 %}
+          <form action="{{ url_for(route) }}" method="get">
+            <button type="submit" class="btn btn-primary btn-lg btn-block">
+              <strong>Manage {{ item }}</strong>
+            </button>
+          </form>
+        {% endif %}
+      </div>
+    {% endfor %}
   </div>
 {% endblock %}
-
