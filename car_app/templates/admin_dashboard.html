@@ -1,10 +1,8 @@
 {% extends 'base.html' %}
 
-{% block header %}
-  <h1>{% block title %}Admin Dashboard{% endblock %}</h1>
-{% endblock %}
 
 {% block content %}
+  <h1>{% block title %}Admin Dashboard{% endblock %}</h1>
   <div class="row">
     {% set items = [('Customers', 'customer.index'), ('Cars', 'car.index'), ('Bookings', 'booking.index')] %}
     {% for item, route in items %}
