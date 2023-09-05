@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>Responsive Registration Form</title>
+    <title>WheelsOnRent Booking Form</title>
     <meta name="viewport" content="width=device-width,
       initial-scale=1.0"/>
     <link rel="stylesheet" href="{{ url_for('static', filename='assetsss/style.css') }}" />
@@ -10,12 +10,12 @@
   <body>
     <div class="container">
       <h1 class="form-title">Booking</h1>
-      <form action="{{ url_for('booking') }}" method="post">
+      <form action="{{ url_for('booking.create') }}" method="post">
         <div class="main-user-info">
           <div class="user-input-box">
             <label for="vehicle_type">Available Cars</label>
-            <select type="text" id="vehicle_type" name="vehicle_type">{% for vehicle in vehicles %}
-              <option value={{vehicle.type}},{{vehicle.brand}},{{vehicle.price_per_day}} >{{vehicle.type}} | {{vehicle.brand}} | {{vehicle.price_per_day}} price per day</option>
+            <select id="vehicle_type" name="car_id">{% for car in cars %}
+		    <option value={{car.id}},{{car.name}},{{car.model}},{{car.status}},{{car.seat}},{{car.door}},{{car.gearbox}} >{{car.id}} | {{car.name}} | {{car.model}} | {{car.status}} | {{car.seat}} | {{car.door}} | {{car.gearbox}} car name</option>
               {% endfor %}
 
               <!-- Add more options as needed -->

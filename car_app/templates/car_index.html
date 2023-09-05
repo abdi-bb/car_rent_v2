@@ -2,25 +2,46 @@
 
 {% block header %}
   <h1>{% block title %}Available Cars{% endblock %}</h1>
-  {% if g.customer %}
-    <a class="action" href="{{ url_for('booking.index') }}">Manage Your Booking</a>
+  {% if g.customer and g.customer['role'] == 1 %}
+    <a class="action" href="{{ url_for('car.create') }}">Add New Car</a>
+    <a class="action" href="{{ url_for('car.admin_mode') }}">See All Cars</a>
   {% endif %}
 {% endblock %}
 
 {% block content %}
-  {% for car in cars %}
-    <article class="post">
-      <header>
-        <div>
-          <h1>{{ car['name'] }}</h1>
-          <div class="car_image">{{ car['image'] }}</div>
-        {% if g.admin %}
-          <a class="action" href="{{ url_for('car.update', id=car['id']) }}">Edit Car Details</a>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Seats</th>
+      <th>Transmission</th>
+      <th>Image</th>
+      {% if g.customer and g.customer['role'] == 1 %}
+        <th>Edit</th>
+        <th>Delete</th>
+      {% endif %}
+    </tr>
+  </thead>
+  <tbody>
+    {% for car in cars %}
+      <tr>
+        <td>{{ car.name }}</td>
+        <td>{{ car.seat }}</td>
+        <td>{{ car.gearbox }}</td>
+        <td>
+          <img src="{{ car.image }}" alt="{{ car.name }} Image" width="100">
+        </td>
+        {% if g.customer and g.customer['role'] == 1 %}
+          <td><a class="update" href="{{ url_for('car.update', id=car['id']) }}">Edit</a></td>
+          <td>
+            <form action="{{ url_for('car.delete', id=car['id']) }}" method="post">
+              <input class="danger" type="submit" value="Delete" onclick="return confirm('Are you sure?')">
+            </form>
+          </td>
         {% endif %}
-      </header>
-    </article>
-    {% if not loop.last %}
-      <hr>
-    {% endif %}
-  {% endfor %}
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
 {% endblock %}
+

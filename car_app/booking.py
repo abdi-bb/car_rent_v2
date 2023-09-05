@@ -15,11 +15,11 @@ bp = Blueprint('booking', __name__, url_prefix='/booking')
 def index():
     db = get_db()
     boookings = db.execute(
-        'SELECT r.id, cu.name, pickup_time, ca.name'
-        ' FROM reservation r'
-        ' JOIN customer cu ON r.customer_id = cu.id'
-        ' JOIN car ca on r.car_id = ca.id'
-        ' ORDER BY pickup_time ASC'
+        'SELECT b.id, cu.name, ca.name, start_date, end_date'
+        ' FROM booking b'
+        ' JOIN customer cu ON b.customer_id = cu.id'
+        ' JOIN car ca on b.car_id = ca.id'
+        ' ORDER BY start_date ASC'
     ).fetchall()
     return render_template('booking_index.html', boookings=boookings)
 
@@ -28,38 +28,45 @@ def index():
 @login_required
 def create():
     if request.method == 'POST':
-        pickup_time = request.form['pickup_time']
-        dropoff_time = request.form['dropoff_time']
-        email = request.form['email']
-        password = request.form['password']
+        car_id = request.form['car_id']
+        start_date = request.form['start_date']
+        end_date = request.form['end_date']
         error = None
 
-        if not email:
-            error = 'Email is required.'
-        if not password:
-            error = 'Password is required.'
+        if not car_id:
+            error = 'Select car.'
 
         if error is not None:
             flash(error)
         else:
             db = get_db()
-            db.execute(
-                'INSERT INTO booking (pickup_time, dropoff_time, email, password, customer_id)'
-                ' VALUES (?, ?, ?, ?, ?)',
-                (pickup_time, dropoff_time, email, generate_password_hash(password), g.customer['id'])
-            )
-            db.commit()
+            try:
+                db.execute(
+                    'INSERT INTO booking (car_id, start_date, end_date, customer_id)'
+                    ' VALUES (?, ?, ?, ?)',
+                    (car_id, start_date, end_date, g.customer['id'])
+                )
+                db.commit()
+            except Exception as err:
+                print(err)
             return redirect(url_for('booking.index'))
 
-    return render_template('booking_create.html')
+    db = get_db()
+    cars = db.execute(
+        'SELECT id, name, model, status, seat, door, gearbox, image'
+        ' FROM car'
+        ' WHERE status = 1'
+        ).fetchall()
+
+    return render_template('booking_create.html', cars=cars)
 
 # Getting booking with the same booking id
 def get_booking(id, check_author=True):
     booking = get_db().execute(
-        'SELECT r.id, cu.name, pickup_time, ca.name'
-        ' FROM reservation r'
-        ' JOIN customer cu ON r.customer_id = cu.id'
-        ' JOIN car ca on r.car_id = ca.id'
+        'SELECT b.id, cu.name, ca.name, start_date, end_date'
+        ' FROM booking b'
+        ' JOIN customer cu ON b.customer_id = cu.id'
+        ' JOIN car ca on b.car_id = ca.id'
         ' WHERE booking.id = ?',
         (id,)
     ).fetchone()
@@ -69,9 +76,9 @@ def get_booking(id, check_author=True):
 
     if check_author and g.customer and booking['customer_id'] != g.customer['id']:
         abort(403)
-    elif check_author and not g.admin:
+    elif check_author and not g.customer and g.customer['role'] == 1:
         abort(403)
-    elif not check_author or g.admin or g.customer == booking['customer_id']:
+    elif not check_author or g.customer and g.customer['role'] == 1 or g.customer == booking['customer_id']:
         return booking
 
 @bp.route('/<int:id>/update', methods=('GET', 'POST'))
@@ -80,25 +87,22 @@ def update(id):
     booking = get_booking(id)
 
     if request.method == 'POST':
-        pickup_time = request.form['pickup_time']
-        dropoff_time = request.form['dropoff_time']
-        email = request.form['email']
-        password = request.form['password']
+        car_id = request.form['car_id']
+        start_date = request.form['start_date']
+        end_date = request.form['end_date']
         error = None
 
-        if not email:
-            error = 'Email is required.'
-        elif not password:
-            error = 'Password is required.'
+        if not car_id:
+            error = 'Select car.'
 
         if error is not None:
             flash(error)
         else:
             db = get_db()
             db.execute(
-                'UPDATE booking SET pickup_time = ?, dropoff_time = ?, email = ?, password = ?'
+                'UPDATE booking SET car_id = ?, start_date = ?, end_date = ?, customer_id'
                 ' WHERE id = ?',
-                (pickup_time, dropoff_time, email, password, id)
+                (car_id, start_date, end_date, g.customer['id'], id)
             )
             db.commit()
             return redirect(url_for('booking.index'))

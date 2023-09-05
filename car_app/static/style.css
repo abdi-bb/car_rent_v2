@@ -5,7 +5,7 @@ html {
 }
 
 body {
-  max-width: 960px;
+  /*max-width: 1020px;/*were 960px*/
   margin: 0 auto;
   background: white;
 }
@@ -26,7 +26,7 @@ hr {
 }
 
 nav {
-  background: lightgray;
+  /*background: lightgray;*/
   display: flex;
   align-items: center;
   padding: 0 0.5rem;
@@ -68,6 +68,34 @@ nav ul li a, nav ul li span, header .action {
   flex: auto;
   margin: 1rem 0 0.25rem 0;
 }
+
+
+
+
+/* Adding custom styling */
+.content {
+  display: flex;
+  flex-direction: column; /* Stack children vertically */
+  justify-content: flex-start; /* Align content at the top */
+  align-items: center; /* Horizontally center content */
+  height: 100vh; /* 100% of the viewport height */
+  text-align: center; /* Optionally center text inside .content */
+}
+.content header {
+  margin-top: 10%; /* Adjust this value to position the h1 element */
+  margin-bottom: 20px; /* Add spacing below the h1 header */
+}
+/* Add horizontal padding between table cells */
+th, td {
+  padding-left: 8px; /* Adjust the left padding value as needed */
+  padding-right: 8px; /* Adjust the right padding value as needed */
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+
+
+
 
 .flash {
   margin: 1em 0;
@@ -134,28 +162,3 @@ input[type=submit] {
 }
 
 
-
-/* footer custom style */
-footer {
-  border-top: 1px solid #ddd;
-  background: white;
-  position: fixed;
-  width: 100%;
-  bottom: 0px;
-  padding: 20px 0;
-  border-top: 1px solid #ddd;
-
-  background: lightgray;
-  display: flex;
-  align-items: center;
-  padding: 0 0.5rem;
-}
-
-footer p {
-	position: fixed;
-	left: 10px;
-	bottom: 10px;
-}
-
-div .Body {
-}

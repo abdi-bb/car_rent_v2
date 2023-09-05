@@ -15,8 +15,9 @@ bp = Blueprint('car', __name__)
 def index():
     db = get_db()
     cars = db.execute(
-        'SELECT name, image'
+        'SELECT id, name, seat, gearbox, image'
         ' FROM car'
+        ' WHERE status = 1'
         ' ORDER BY name ASC'
     ).fetchall()
     return render_template('car_index.html', cars=cars)
@@ -26,11 +27,25 @@ def index():
 def guest_mode():
     db = get_db()
     cars = db.execute(
-        'SELECT name, image'
+        'SELECT id, name, seat, gearbox, image'
         ' FROM car'
+        ' WHERE status = 1'
         ' ORDER BY name ASC'
     ).fetchall()
     return render_template('car_index.html', cars=cars)
+
+# Admin mode page, Admin can see all cars(booked and avalable)
+@bp.route('/admin_mode')
+@login_required
+def admin_mode():
+    db = get_db()
+    cars = db.execute(
+        'SELECT id, name, seat, gearbox, image'
+        ' FROM car'
+        ' ORDER BY name ASC'
+    ).fetchall()
+    return render_template('car_all.html', cars=cars)
+
 
 ## Admin can create new car entry ##
 @bp.route('/create', methods=('GET', 'POST'))
@@ -76,7 +91,7 @@ def create():
 # Getting a car associated with a given id to update it
 def get_car(id, check_author=True):
     car = get_db().execute(
-        'SELECT name, model, status, seat, door, grarbox, image'
+        'SELECT id, name, model, status, seat, door, gearbox, image'
         ' FROM car'
         ' WHERE car.id = ?',
         (id,)
