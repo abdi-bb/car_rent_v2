@@ -21,6 +21,12 @@
 
         <!--=============== CSS ===============-->
         <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/styles.css') }}">
+
+	 <!-- ===== CSS2 ===== -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='assetss/css/styles.css') }}">
+
+        <!-- ===== BOX ICONS ===== -->
+        <link href='https://cdn.jsdelivr.net/npm/boxicons@2.0.5/css/boxicons.min.css' rel='stylesheet'>
         
         <title>{% block title %}{% endblock %} - WheelsOnRent</title>
     </head>
@@ -168,4 +174,8 @@
 
         <!--=============== MAIN JS ===============-->
         <script src="{{ url_for('static', filename='assets/js/main.js') }}"></script>
+
+	<!--=============== MAIN JS2 =============================-->
+        <script src="{{ url_for('static', filename='assetss/js/main.js') }}"></script>
+
 </html>
