@@ -37,8 +37,9 @@
 
                 <div class="nav_menu" id="nav-menu">
                     <ul class="nav_list">
-			{% if g.customer and g.customer['role'] == 0 %}
-                          <li class="nav_item"><a href="{{url_for('booking.create')}}" class="nav_link active-link">Book Now</a></li>
+			   <li class="nav_item"><a href="{{url_for('car.index')}}" class="nav_link">Home</a></li>
+                          <li class="nav_item"><a href="{{url_for('booking.create')}}" class="nav_link">Book Now</a></li>
+			{% if g.customer['role'] == 0 %}
 			  <li class="nav_item"><a href="{{url_for('booking.index')}}" class="nav_link active-link">Manage Your Bookings</a></li>
 			{% endif %}
                         {% if g.customer %}

@@ -11,7 +11,7 @@ bp = Blueprint('car', __name__)
 
 # Car list
 @bp.route('/')
-@login_required
+#@login_required
 def index():
     db = get_db()
     cars = db.execute(
