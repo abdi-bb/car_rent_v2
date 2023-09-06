@@ -9,10 +9,17 @@ from car_app.db import get_db
 
 bp = Blueprint('car', __name__)
 
-# Car list
+
+# Home page
 @bp.route('/')
 #@login_required
 def index():
+    return render_template('home.html')
+
+# Car list
+@bp.route('/')
+@login_required
+def list():
     db = get_db()
     cars = db.execute(
         'SELECT id, name, seat, gearbox, image'
@@ -34,7 +41,7 @@ def guest_mode():
     ).fetchall()
     return render_template('car_index.html', cars=cars)
 
-# Admin mode page, Admin can see all cars(booked and avalable)
+# Admin mode page, Admin can see all cars(booked and available)
 @bp.route('/admin_mode')
 @login_required
 def admin_mode():
