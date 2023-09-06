@@ -37,7 +37,10 @@
 
                 <div class="nav_menu" id="nav-menu">
                     <ul class="nav_list">
-                        <li class="nav_item"><a href="{{url_for('booking.create')}}" class="nav_link active-link">Book Now</a></li>
+			{% if g.customer and g.customer['role'] == 0 %}
+                          <li class="nav_item"><a href="{{url_for('booking.create')}}" class="nav_link active-link">Book Now</a></li>
+			  <li class="nav_item"><a href="{{url_for('booking.index')}}" class="nav_link active-link">Manage Your Bookings</a></li>
+			{% endif %}
                         {% if g.customer %}
 			 <li><span>{{ g.customer['name'] }}</span>
                         <li class="nav_item"><a href="{{ url_for('customer.logout') }}" class="nav_link">Log Out</a></li>
@@ -81,9 +84,9 @@
                         <i class="ri-steering-line"></i> WheelsOnRent
                     </a>
                     <p class="footer_description">
-                        We offer the best electric cars of <br>
-                        the most recognized brands in <br>
-                        the world.
+                        We offer car rental solutions<br>
+                        to our esteemed customers <br>
+                        on time.
                     </p>
                 </div>
 
@@ -102,9 +105,6 @@
                         <li>
                             <a href="#" class="footer_link">History</a>
                         </li>
-                        <li>
-                            <a href="#" class="footer_link">Shop</a>
-                        </li>
                     </ul>
                 </div>
 
@@ -115,10 +115,7 @@
 
                     <ul class="footer_links">
                         <li>
-                            <a href="#" class="footer_link">Request a quote</a>
-                        </li>
-                        <li>
-                            <a href="#" class="footer_link">Find a dealer</a>
+                            <a href="#" class="footer_link">Find a car</a>
                         </li>
                         <li>
                             <a href="#" class="footer_link">Contact us</a>

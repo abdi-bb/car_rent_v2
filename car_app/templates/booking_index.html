@@ -5,6 +5,9 @@
   {% if g.customer %}
     <a class="action" href="{{ url_for('booking.create') }}">Add New</a>
   {% endif %}
+  {% if g.customer and g.customer['role'] == 1 %}
+    <a class="action" href="{{ url_for('customer.admin_dashboard') }}">To Admin Dashboard</a>
+  {% endif %}
 {% endblock %}
 
 {% block content %}

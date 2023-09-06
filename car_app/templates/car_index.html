@@ -5,6 +5,7 @@
   {% if g.customer and g.customer['role'] == 1 %}
     <a class="action" href="{{ url_for('car.create') }}">Add New Car</a>
     <a class="action" href="{{ url_for('car.admin_mode') }}">See All Cars</a>
+    <a class="action" href="{{ url_for('customer.admin_dashboard') }}">To Admin Dashboard</a>
   {% endif %}
 {% endblock %}
 
